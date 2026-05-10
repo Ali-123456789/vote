@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🍽️ مسابقة أفضل طبق منزلي</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{--gold:#F4A72A;--gold2:#FFD166;--dark:#1A0A00;--brown:#2A1000;--cream:#FFF8EE;--red:#E63946;--green:#2D9E60;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Tajawal',sans-serif;background:var(--dark);color:var(--cream);min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;pointer-events:none;
+    background:radial-gradient(circle at 15% 15%,#3D1A0044 0%,transparent 55%),
+               radial-gradient(circle at 85% 85%,#F4A72A0F 0%,transparent 55%);}
+
+  header{text-align:center;padding:36px 20px 20px;}
+  header::after{content:'';display:block;width:100px;height:3px;margin:14px auto 0;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+  .trophy{font-size:50px;display:block;animation:float 3s ease-in-out infinite;}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+  h1{font-size:clamp(20px,5vw,34px);font-weight:900;color:var(--gold);margin-top:8px;}
+  .subtitle{font-size:13px;opacity:.55;margin-top:4px;}
+
+  .admin-toggle{position:fixed;top:16px;left:16px;z-index:999;
+    background:var(--brown);border:1px solid var(--gold);color:var(--gold);
+    border-radius:12px;padding:8px 14px;font-family:'Tajawal',sans-serif;
+    font-size:13px;cursor:pointer;transition:.2s;}
+  .admin-toggle:hover{background:var(--gold);color:var(--dark);}
+
+  .live-badge{position:fixed;top:16px;right:16px;z-index:999;
+    display:flex;align-items:center;gap:6px;
+    background:var(--brown);border:1px solid #2D9E6088;
+    border-radius:30px;padding:6px 12px;font-size:12px;color:#2D9E60;}
+  .live-dot{width:8px;height:8px;border-radius:50%;background:#2D9E60;animation:pulse 1.5s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+  .section{max-width:600px;margin:0 auto 28px;padding:0 20px;}
+  .box{background:var(--brown);border:1px solid #F4A72A33;border-radius:20px;padding:24px;}
+  .box-title{color:var(--gold);font-size:17px;font-weight:700;margin-bottom:16px;}
+
+  .input-row{display:flex;gap:10px;flex-wrap:wrap;}
+  input[type=text],input[type=number],input[type=password]{
+    flex:1;min-width:120px;background:#1A0A00;border:1px solid #F4A72A44;
+    border-radius:12px;padding:11px 14px;color:var(--cream);
+    font-family:'Tajawal',sans-serif;font-size:15px;outline:none;transition:.2s;-moz-appearance:textfield;}
+  input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;}
+  input:focus{border-color:var(--gold);}
+  input::placeholder{color:#ffffff33;}
+
+  .btn{background:var(--gold);color:var(--dark);border:none;border-radius:12px;
+    padding:11px 22px;font-family:'Tajawal',sans-serif;font-size:15px;font-weight:700;
+    cursor:pointer;transition:.15s;white-space:nowrap;}
+  .btn:hover{background:var(--gold2);transform:scale(1.03);}
+  .btn-outline{background:transparent;border:1px solid var(--gold);color:var(--gold);
+    border-radius:12px;padding:9px 18px;font-family:'Tajawal',sans-serif;
+    font-size:13px;cursor:pointer;transition:.2s;}
+  .btn-outline:hover{background:var(--gold);color:var(--dark);}
+  .btn-red{background:transparent;border:1px solid var(--red);color:var(--red);
+    border-radius:12px;padding:9px 18px;font-family:'Tajawal',sans-serif;
+    font-size:13px;cursor:pointer;transition:.2s;}
+  .btn-red:hover{background:var(--red);color:#fff;}
+
+  .voter-tag{display:inline-flex;align-items:center;gap:6px;
+    background:var(--brown);border:1px solid var(--gold);
+    border-radius:30px;padding:7px 16px;color:var(--gold);font-size:14px;margin-bottom:8px;}
+  .change-link{font-size:12px;color:#ffffff44;cursor:pointer;
+    text-decoration:underline;display:block;margin-top:4px;text-align:center;}
+  .change-link:hover{color:var(--gold);}
+
+  .dish-num-row{display:flex;gap:10px;align-items:center;}
+  .dish-num-row input{max-width:110px;text-align:center;font-size:22px;font-weight:700;}
+
+  .vcard{background:linear-gradient(145deg,#2E1200,#1E0C00);
+    border:1px solid #F4A72A55;border-radius:22px;padding:28px;text-align:center;
+    animation:popIn .35s cubic-bezier(.34,1.56,.64,1) both;}
+  @keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+  .vcard .big-num{font-size:72px;font-weight:900;color:var(--gold);line-height:1;}
+  .vcard .dish-name-big{font-size:20px;font-weight:700;color:var(--cream);margin:4px 0 20px;}
+  .stars{display:flex;justify-content:center;gap:8px;margin-bottom:14px;}
+  .star{font-size:38px;cursor:pointer;filter:grayscale(1) brightness(.35);
+    transition:transform .15s,filter .15s;user-select:none;}
+  .star.active{filter:none;transform:scale(1.1);}
+  .star.pulse{animation:sPulse .25s ease;}
+  @keyframes sPulse{0%{transform:scale(1)}50%{transform:scale(1.55)}100%{transform:scale(1.1)}}
+  .star-label{font-size:16px;color:var(--gold);font-weight:700;min-height:24px;margin-bottom:18px;}
+  .vote-submit{width:100%;background:linear-gradient(135deg,var(--gold),#E8870A);
+    color:var(--dark);border:none;border-radius:14px;padding:14px;
+    font-family:'Tajawal',sans-serif;font-size:17px;font-weight:700;cursor:pointer;transition:.2s;}
+  .vote-submit:hover{transform:scale(1.03);box-shadow:0 6px 22px #F4A72A44;}
+  .vote-submit.done{background:var(--green);color:#fff;}
+  .vote-again{margin-top:14px;font-size:13px;color:#ffffff44;
+    cursor:pointer;text-decoration:underline;display:block;}
+  .vote-again:hover{color:var(--gold);}
+
+  .admin-panel{display:none;max-width:600px;margin:0 auto 28px;padding:0 20px;}
+  .admin-panel.open{display:block;}
+  .dish-item{display:flex;align-items:center;gap:10px;
+    background:#1A0A00;border:1px solid #F4A72A22;
+    border-radius:12px;padding:10px 14px;margin-bottom:8px;}
+  .dish-item .dnum{font-size:22px;font-weight:900;color:var(--gold);width:36px;text-align:center;}
+  .dish-item .dinfo{flex:1;font-size:14px;}
+  .dish-item .dvotes{font-size:12px;color:#ffffff44;}
+  .del-btn{background:transparent;border:1px solid #ffffff22;color:#ffffff44;
+    border-radius:8px;padding:4px 10px;font-size:12px;cursor:pointer;transition:.2s;}
+  .del-btn:hover{border-color:var(--red);color:var(--red);}
+  .admin-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+
+  #lbSection{max-width:600px;margin:0 auto 60px;padding:0 20px;display:none;}
+  .lb-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+  .lb-title{font-size:21px;font-weight:900;color:var(--gold);}
+  .lb-updated{font-size:11px;color:#ffffff33;}
+  .lb-row{display:flex;align-items:center;gap:12px;
+    background:var(--brown);border:1px solid #F4A72A22;
+    border-radius:14px;padding:13px 16px;margin-bottom:10px;transition:.2s;}
+  .lb-row:hover{border-color:#F4A72A55;}
+  .lb-pos{font-size:22px;width:36px;text-align:center;}
+  .lb-info{flex:1;}
+  .lb-num{font-size:17px;font-weight:700;}
+  .lb-sub{font-size:12px;color:var(--gold);opacity:.7;}
+  .lb-score{font-size:22px;font-weight:900;color:var(--gold);}
+  .lb-count{font-size:11px;color:#ffffff44;}
+  .lb-bar-wrap{height:4px;background:#ffffff11;border-radius:10px;overflow:hidden;margin-top:6px;}
+  .lb-bar{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:10px;transition:width .6s ease;}
+
+  .empty{text-align:center;opacity:.35;padding:40px 20px;font-size:14px;}
+  .loading-txt{text-align:center;opacity:.4;padding:30px;font-size:14px;}
+
+  .modal-bg{position:fixed;inset:0;background:#00000099;z-index:1000;
+    display:flex;align-items:center;justify-content:center;padding:20px;}
+  .modal{background:#2A1000;border:1px solid var(--gold);border-radius:20px;
+    padding:28px;max-width:400px;width:100%;text-align:center;}
+  .modal h3{color:var(--gold);font-size:18px;margin-bottom:8px;}
+  .modal p{font-size:13px;opacity:.6;margin-bottom:20px;}
+  .modal input{width:100%;margin-bottom:12px;text-align:center;letter-spacing:4px;font-size:18px;}
+  .modal-btns{display:flex;gap:10px;}
+  .modal-btns button{flex:1;}
+
+  .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);
+    background:var(--green);color:#fff;padding:12px 24px;border-radius:30px;
+    font-size:15px;font-weight:600;transition:transform .3s;z-index:9999;pointer-events:none;}
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  .toast.warn{background:#c07000;}
+  .toast.err{background:var(--red);}
+</style>
+</head>
+<body>
+
+<button class="admin-toggle" onclick="showAdminLogin()">⚙️ إدارة</button>
+<div class="live-badge"><div class="live-dot"></div> مباشر</div>
+
+<header>
+  <span class="trophy">🏆</span>
+  <h1>مسابقة أفضل طبق منزلي</h1>
+  <p class="subtitle">أدخل اسمك ثم رقم الطبق وقيّمه 🍽️</p>
+</header>
+
+<!-- VOTER -->
+<div class="section" id="voterArea">
+  <div class="box" id="voterSetupBox">
+    <div class="box-title">👤 أدخل اسمك أولاً</div>
+    <div class="input-row">
+      <input type="text" id="voterInput" placeholder="اسمك هنا..." maxlength="30">
+      <button class="btn" onclick="setVoter()">دخول</button>
+    </div>
+  </div>
+  <div id="voterDisplay" style="display:none;text-align:center">
+    <div class="voter-tag">👤 <span id="voterName"></span></div>
+    <span class="change-link" onclick="changeVoter()">تغيير الاسم</span>
+  </div>
+</div>
+
+<!-- DISH NUMBER -->
+<div class="section" id="dishSearchArea" style="display:none">
+  <div class="box">
+    <div class="box-title">🔢 أدخل رقم الطبق اللي تبي تقيّمه</div>
+    <div class="dish-num-row">
+      <input type="number" id="dishNumInput" placeholder="مثال: 3" min="1">
+      <button class="btn" onclick="lookupDish()">عرض ←</button>
+    </div>
+  </div>
+</div>
+
+<!-- VOTE CARD -->
+<div class="section" id="voteCard" style="display:none">
+  <div class="vcard">
+    <div class="big-num" id="vcNum"></div>
+    <div class="dish-name-big" id="vcDishName"></div>
+    <div class="stars" id="vcStars"></div>
+    <div class="star-label" id="vcLabel">اختر تقييمك</div>
+    <button class="vote-submit" id="vcSubmit" onclick="submitVote()">🗳️ أرسل تقييمي</button>
+    <span class="vote-again" onclick="voteAnother()">⬅️ قيّم طبقاً آخر</span>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="admin-panel" id="adminPanel">
+  <div class="box">
+    <div class="box-title">⚙️ إدارة الأطباق</div>
+    <p style="font-size:13px;opacity:.45;margin-bottom:14px">أدخل رقم الطبق واسمه — الرقم هو اللي سيستخدمه المقيّم</p>
+    <div class="input-row">
+      <input type="number" id="newDishNum" placeholder="الرقم" min="1" max="999" style="max-width:86px;text-align:center;font-size:20px;font-weight:700">
+      <input type="text" id="newDishName" placeholder="اسم الطبق" maxlength="40">
+      <button class="btn" onclick="addDish()">➕ أضف</button>
+    </div>
+    <div id="adminDishList" style="margin-top:16px"><div class="loading-txt">جاري التحميل...</div></div>
+    <div class="admin-actions">
+      <button class="btn-red" onclick="resetVotes()">🗑️ مسح جميع الأصوات</button>
+      <button class="btn-outline" onclick="toast('🔄 يتحدث تلقائياً!')">🔄 مباشر</button>
+    </div>
+  </div>
+</div>
+
+<!-- LEADERBOARD -->
+<div id="lbSection">
+  <div class="lb-header">
+    <div class="lb-title">📊 نتائج التقييم</div>
+    <div class="lb-updated" id="lbUpdated"></div>
+  </div>
+  <div id="lbRows"><div class="loading-txt">جاري التحميل...</div></div>
+</div>
+
+<!-- ADMIN LOGIN MODAL -->
+<div class="modal-bg" id="adminModal" style="display:none">
+  <div class="modal">
+    <h3>🔐 لوحة الإدارة</h3>
+    <p>أدخل كلمة السر للدخول</p>
+    <input type="password" id="adminPassInput" placeholder="••••••" maxlength="30">
+    <div class="modal-btns">
+      <button class="btn-outline" onclick="closeAdminModal()">إلغاء</button>
+      <button class="btn" onclick="checkAdminPass()">دخول</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, get, onValue, remove, update }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+// ═══════════════ CONFIG ═══════════════
+const ADMIN_PASS = 'admin123'; // ← غيّر كلمة السر هنا
+const firebaseConfig = {
+  apiKey: "AIzaSyAytCF2XcHDTeb8SlLmYEkY6lzw7bbmNus",
+  authDomain: "ali11-22a03.firebaseapp.com",
+  databaseURL: "https://ali11-22a03-default-rtdb.firebaseio.com",
+  projectId: "ali11-22a03",
+  storageBucket: "ali11-22a03.firebasestorage.app",
+  messagingSenderId: "41863232098",
+  appId: "1:41863232098:web:584cbbc200513c9b816f3b"
+};
+
+// ═══════════════ INIT ═══════════════
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const dishesRef = ref(db, 'dishes');
+
+const starLabels = ['','ضعيف 😕','مقبول 😐','جيد 🙂','ممتاز 😄','رائع جداً 🤩'];
+let dishes = {};
+let voterId = localStorage.getItem('cv_voter') || '';
+let currentDishKey = null;
+let pendingStar = 0;
+let isAdmin = false;
+
+// ═══════════════ REALTIME LISTENER ═══════════════
+onValue(dishesRef, (snapshot) => {
+  dishes = snapshot.val() || {};
+  renderLB();
+  if (isAdmin) renderAdmin();
+  const now = new Date();
+  document.getElementById('lbUpdated').textContent =
+    `آخر تحديث ${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+});
+
+// ═══════════════ VOTER ═══════════════
+if (voterId) showReady();
+
+window.setVoter = function() {
+  const v = document.getElementById('voterInput').value.trim();
+  if (!v) { toast('⚠️ أدخل اسمك', 'warn'); return; }
+  voterId = v;
+  localStorage.setItem('cv_voter', voterId);
+  showReady();
+};
+function showReady() {
+  document.getElementById('voterSetupBox').style.display = 'none';
+  document.getElementById('voterDisplay').style.display = 'block';
+  document.getElementById('voterName').textContent = voterId;
+  document.getElementById('dishSearchArea').style.display = 'block';
+}
+window.changeVoter = function() {
+  voterId = ''; localStorage.removeItem('cv_voter');
+  document.getElementById('voterSetupBox').style.display = 'block';
+  document.getElementById('voterDisplay').style.display = 'none';
+  document.getElementById('dishSearchArea').style.display = 'none';
+  document.getElementById('voteCard').style.display = 'none';
+  document.getElementById('voterInput').value = '';
+};
+document.getElementById('voterInput').addEventListener('keydown', e => { if(e.key==='Enter') window.setVoter(); });
+
+// ═══════════════ LOOKUP ═══════════════
+window.lookupDish = function() {
+  const num = parseInt(document.getElementById('dishNumInput').value);
+  if (!num || num < 1) { toast('⚠️ أدخل رقماً صحيحاً', 'warn'); return; }
+  const entry = Object.entries(dishes).find(([k,d]) => d.num === num);
+  if (!entry) { toast(`❌ لا يوجد طبق رقم ${num}`, 'err'); return; }
+  openVoteCard(entry[0], entry[1]);
+};
+document.getElementById('dishNumInput').addEventListener('keydown', e => { if(e.key==='Enter') window.lookupDish(); });
+
+function openVoteCard(key, dish) {
+  currentDishKey = key;
+  const myVote = dish.votes ? dish.votes[safeId(voterId)] : 0;
+  pendingStar = myVote || 0;
+  document.getElementById('vcNum').textContent = dish.num;
+  document.getElementById('vcDishName').textContent = dish.label || '';
+  document.getElementById('voteCard').style.display = 'block';
+  document.getElementById('voteCard').scrollIntoView({ behavior:'smooth', block:'center' });
+  const btn = document.getElementById('vcSubmit');
+  if (myVote) {
+    btn.textContent = `✅ قيّمته ${myVote} نجوم — تعديل؟`;
+    btn.className = 'vote-submit done';
+  } else {
+    btn.textContent = '🗳️ أرسل تقييمي';
+    btn.className = 'vote-submit';
+  }
+  drawStars(pendingStar);
+}
+
+function drawStars(val) {
+  document.getElementById('vcLabel').textContent = val ? starLabels[val] : 'اختر تقييمك';
+  document.getElementById('vcStars').innerHTML = [1,2,3,4,5].map(s =>
+    `<span class="star ${val>=s?'active':''}" onclick="pickStar(${s})" id="vs${s}">⭐</span>`
+  ).join('');
+}
+window.pickStar = function(v) {
+  pendingStar = v; drawStars(v);
+  const el = document.getElementById('vs'+v);
+  if(el){el.classList.add('pulse');setTimeout(()=>el.classList.remove('pulse'),280);}
+  document.getElementById('vcSubmit').textContent = '🗳️ أرسل تقييمي';
+  document.getElementById('vcSubmit').className = 'vote-submit';
+};
+
+window.submitVote = async function() {
+  if (!pendingStar) { toast('⭐ اختر عدد النجوم أولاً', 'warn'); return; }
+  if (!currentDishKey) return;
+  const voteRef = ref(db, `dishes/${currentDishKey}/votes/${safeId(voterId)}`);
+  await set(voteRef, pendingStar);
+  const dish = dishes[currentDishKey];
+  const btn = document.getElementById('vcSubmit');
+  btn.textContent = `✅ تم تسجيل ${pendingStar} نجوم!`;
+  btn.className = 'vote-submit done';
+  toast(`🌟 تم تقييم الطبق رقم ${dish.num} بـ ${pendingStar} نجوم!`);
+};
+
+window.voteAnother = function() {
+  document.getElementById('voteCard').style.display = 'none';
+  document.getElementById('dishNumInput').value = '';
+  currentDishKey = null; pendingStar = 0;
+  document.getElementById('dishSearchArea').scrollIntoView({ behavior:'smooth' });
+};
+
+// ═══════════════ ADMIN LOGIN ═══════════════
+window.showAdminLogin = function() {
+  if (isAdmin) { document.getElementById('adminPanel').classList.toggle('open'); return; }
+  document.getElementById('adminModal').style.display = 'flex';
+  setTimeout(() => document.getElementById('adminPassInput').focus(), 100);
+};
+window.closeAdminModal = function() {
+  document.getElementById('adminModal').style.display = 'none';
+  document.getElementById('adminPassInput').value = '';
+};
+window.checkAdminPass = function() {
+  if (document.getElementById('adminPassInput').value === ADMIN_PASS) {
+    isAdmin = true;
+    window.closeAdminModal();
+    document.getElementById('adminPanel').classList.add('open');
+    document.querySelector('.admin-toggle').textContent = '⚙️ إدارة ✓';
+    renderAdmin();
+    toast('✅ مرحباً بك في لوحة الإدارة');
+  } else {
+    toast('❌ كلمة السر خاطئة', 'err');
+    document.getElementById('adminPassInput').value = '';
+  }
+};
+document.getElementById('adminPassInput').addEventListener('keydown', e => { if(e.key==='Enter') window.checkAdminPass(); });
+
+// ═══════════════ ADMIN ACTIONS ═══════════════
+window.addDish = async function() {
+  const num = parseInt(document.getElementById('newDishNum').value);
+  const label = document.getElementById('newDishName').value.trim();
+  if (!num || num < 1) { toast('⚠️ أدخل رقم الطبق', 'warn'); return; }
+  if (!label) { toast('⚠️ أدخل اسم الطبق', 'warn'); return; }
+  const exists = Object.values(dishes).find(d => d.num === num);
+  if (exists) { toast(`❌ الطبق رقم ${num} موجود مسبقاً`, 'err'); return; }
+  const newRef = ref(db, `dishes/${Date.now()}`);
+  await set(newRef, { num, label, votes: {} });
+  document.getElementById('newDishNum').value = '';
+  document.getElementById('newDishName').value = '';
+  toast(`✅ أُضيف الطبق رقم ${num} — ${label}`);
+};
+
+window.deleteDish = async function(key) {
+  if (!confirm('حذف هذا الطبق؟')) return;
+  await remove(ref(db, `dishes/${key}`));
+};
+
+window.resetVotes = async function() {
+  if (!confirm('مسح جميع الأصوات من كل الأجهزة؟')) return;
+  const updates = {};
+  Object.keys(dishes).forEach(k => { updates[`dishes/${k}/votes`] = {}; });
+  await update(ref(db), updates);
+  toast('🔄 تم مسح جميع الأصوات');
+};
+
+function renderAdmin() {
+  const el = document.getElementById('adminDishList');
+  const list = Object.entries(dishes).sort((a,b) => a[1].num - b[1].num);
+  if (!list.length) { el.innerHTML = '<div class="empty">لا يوجد أطباق بعد</div>'; return; }
+  el.innerHTML = list.map(([key, d]) => {
+    const votes = d.votes ? Object.values(d.votes) : [];
+    const avg = votes.length ? (votes.reduce((a,b)=>a+b,0)/votes.length).toFixed(1) : '—';
+    return `<div class="dish-item">
+      <div class="dnum">${d.num}</div>
+      <div class="dinfo">
+        <div>${d.label}</div>
+        <div class="dvotes">${votes.length} تقييم · معدل ${avg} ⭐</div>
+      </div>
+      <button class="del-btn" onclick="deleteDish('${key}')">حذف</button>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════ LEADERBOARD ═══════════════
+function renderLB() {
+  const sec = document.getElementById('lbSection');
+  const list = Object.entries(dishes);
+  if (!list.length) { sec.style.display='none'; return; }
+  sec.style.display = 'block';
+  const scored = list.map(([key, d]) => {
+    const votes = d.votes ? Object.values(d.votes) : [];
+    const avg = votes.length ? votes.reduce((a,b)=>a+b,0)/votes.length : 0;
+    return { key, d, avg, cnt: votes.length };
+  }).sort((a,b) => b.avg - a.avg);
+  const maxCnt = Math.max(...scored.map(x=>x.cnt), 1);
+  const medals = ['🥇','🥈','🥉'];
+  document.getElementById('lbRows').innerHTML = scored.map((x, i) => `
+    <div class="lb-row">
+      <div class="lb-pos">${i<3?medals[i]:'#'+(i+1)}</div>
+      <div class="lb-info">
+        <div class="lb-num">طبق ${x.d.num} · ${x.d.label}</div>
+        <div class="lb-sub">${x.cnt} مقيّم</div>
+        <div class="lb-bar-wrap"><div class="lb-bar" style="width:${(x.cnt/maxCnt*100).toFixed(0)}%"></div></div>
+      </div>
+      <div style="text-align:left">
+        <div class="lb-score">${x.avg?x.avg.toFixed(1):'—'}</div>
+        <div class="lb-count">من 5 ⭐</div>
+      </div>
+    </div>`).join('');
+}
+
+// ═══════════════ UTILS ═══════════════
+function safeId(str) {
+  return str.replace(/[.#$\[\]\/]/g, '_');
+}
+
+window.toast = function(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (type?' '+type:'');
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.classList.remove('show'), 2800);
+};
+</script>
+</body>
+</html>
